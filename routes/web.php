@@ -2,7 +2,8 @@
 
 use App\Http\Controllers\{
     DashboardController,
-    KelasController
+    KelasController,
+    MatakuliahController
 };
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,9 @@ Route::group([
     ], function () {
         Route::get('kelas/data',[KelasController::class,'data'])->name('kelas.data');
         Route::resource('kelas',KelasController::class);
+
+        Route::get('matakuliah/data',[MatakuliahController::class,'data'])->name('matakuliah.data');
+        Route::resource('matakuliah',MatakuliahController::class);
     });
 });
 
