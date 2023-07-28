@@ -12,4 +12,9 @@ class Matakuliah extends Model
     protected $guarded = ['id'];
     protected $table = 'matakuliah';
 
+    public function dosen_matakuliah()
+    {
+        return $this->belongsToMany(Dosen::class, 'dosen_matakuliah')->withTimestamps();
+    }
+
 }

@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\{
     DashboardController,
+    DosenController,
     KelasController,
+    MahasiswaController,
     MatakuliahController
 };
 use Illuminate\Support\Facades\Route;
@@ -34,7 +36,15 @@ Route::group([
         Route::resource('kelas',KelasController::class);
 
         Route::get('matakuliah/data',[MatakuliahController::class,'data'])->name('matakuliah.data');
+        Route::get('matakuliah/data-search',[MatakuliahController::class,'search'])->name('matakuliah.dosen');
         Route::resource('matakuliah',MatakuliahController::class);
+
+        Route::get('mahasiswa/data',[MahasiswaController::class,'data'])->name('mahasiswa.data');
+        Route::resource('mahasiswa',MahasiswaController::class);
+
+        Route::get('dosen/data',[DosenController::class,'data'])->name('dosen.data');
+        Route::get('dosen/{id}/detail',[DosenController::class,'detail'])->name('dosen.detail');
+        Route::resource('dosen',DosenController::class);
     });
 });
 

@@ -148,4 +148,14 @@ class MatakuliahController extends Controller
 
         return response()->json(['data' => $matakuliah, 'message' => 'Data berhasil dihapus']);
     }
+
+    public function search(Request $request)
+    {
+         $query = Matakuliah::whereDoesntHave('dosen_matakuliah');
+
+        return datatables($query)
+            ->addIndexColumn()
+            ->escapeColumns([])
+            ->make(true);
+    }
 }

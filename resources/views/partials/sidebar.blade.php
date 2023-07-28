@@ -65,8 +65,8 @@
                          </a>
                      </li>
                      <li class="nav-item">
-                         <a href=""
-                             class="nav-link {{ request()->is('admin/mahasiswa*') ? 'active' : '' }}">
+                         <a href="{{ route('mahasiswa.index') }}"
+                             class="nav-link {{ request()->is('mahasiswa*') ? 'active' : '' }}">
                              <i class="nav-icon fas fa-users"></i>
                              <p>
                                  Data Mahasiswa
@@ -74,8 +74,8 @@
                          </a>
                      </li>
                      <li class="nav-item">
-                         <a href=""
-                             class="nav-link {{ request()->is('admin/dosen*') ? 'active' : '' }}">
+                         <a href="{{ route('dosen.index') }}"
+                             class="nav-link {{ request()->is('dosen*') ? 'active' : '' }}">
                              <i class="nav-icon fas fa-user"></i>
                              <p>
                                  Data Dosen
