@@ -50,6 +50,8 @@
                                             <input type="checkbox" class="custom-control-input" id="customCheck1">
                                             <label for="customCheck1" class="custom-control-label">Show password</label>
                                         </div>
+                                        <a href="{{ route('register') }}" class="small mt-1 text-muted">Register Akun?</a>
+
                                     </div>
 
                                     <div>
@@ -60,7 +62,7 @@
 
                                     <div class="text-center mt-3">
                                         <div class="text-muted">
-                                          {{ $setting->nama_aplikasi ?? '' }}
+                                            {{ $setting->nama_aplikasi ?? '' }}
                                         </div>
                                     </div>
                                 </form>

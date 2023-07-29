@@ -27,7 +27,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'username'
+        'username',
+        'role_id'
     ];
 
     /**
@@ -68,5 +69,5 @@ class User extends Authenticatable
   public function hasRole($role) {
     return $this->role->name == $role;
   }
-  
+
 }

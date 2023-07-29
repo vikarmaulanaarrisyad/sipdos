@@ -47,6 +47,22 @@
                                     </div>
 
                                     <div class="form-group mb-3">
+                                        <label for="jenis_kel">Jenis Kelamin <span class="text-danger"
+                                                style="font-size: 0.84em">Mahasiswa</span></label>
+                                            <select name="jenis_kel" id="jenis_kel" class="form-control">
+                                                <option disabled selected>Pilih Jenis Kelamin</option>
+                                                <option value="Laki-laki" {{ old('Laki-laki') ? 'selected' : '' }}>Laki-laki</option>
+                                                <option value="Perempuan" {{ old('Perempuan') ? 'selected' : '' }}>Perempuan</option>
+                                            </select>
+
+                                        @error('jenis_kel')
+                                            <span class="invalid-feedback">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group mb-3">
                                         <label for="email">Email <span class="text-danger"
                                                 style="font-size: 0.84em">Mahasiswa</span></label>
                                         <input type="email" class="form-control @error('email') is-invalid @enderror"

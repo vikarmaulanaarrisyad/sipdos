@@ -2,8 +2,12 @@
 
 namespace App\Actions\Fortify;
 
+use App\Models\Mahasiswa;
 use App\Models\User;
+use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
@@ -21,15 +25,43 @@ class CreateNewUser implements CreatesNewUsers
     {
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
+            'jenis_kel' => ['required'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => $this->passwordRules(),
-            'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
+            'nim' => ['required', 'numeric', 'min:8', 'unique:mahasiswa'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['required', 'accepted'] : '',
         ])->validate();
 
-        return User::create([
-            'name' => $input['name'],
-            'email' => $input['email'],
-            'password' => Hash::make($input['password']),
-        ]);
+
+        DB::beginTransaction();
+
+        try {
+            $user = User::create([
+                'name' => $input['name'],
+                'email' => $input['email'],
+                'password' => Hash::make($input['password']),
+                'username' => $input['nim'],
+                'path_image' => 'default.jpg',
+                'role_id' => 2
+            ]);
+
+            Mahasiswa::create([
+                'user_id' => $user->id,
+                'name' => $input['name'],
+                'nim' => $input['nim'],
+                'tgl_lahir' => Date('Y-m-d'),
+                'jenis_kel' => $input['jenis_kel']
+            ]);
+
+            DB::commit();
+
+            Session::flash('message', 'Profil berhasil diperbarui');
+            Session::flash('success', true);
+
+            return $user;
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
     }
 }
