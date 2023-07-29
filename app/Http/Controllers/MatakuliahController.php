@@ -33,7 +33,7 @@ class MatakuliahController extends Controller
             ->escapeColumns([])
             ->make(true);
     }
-  
+
 
     /**
      * Show the form for creating a new resource.
@@ -151,10 +151,15 @@ class MatakuliahController extends Controller
 
     public function search(Request $request)
     {
-         $query = Matakuliah::whereDoesntHave('dosen_matakuliah');
+         $query = Matakuliah::doesntHave('dosen_matakuliah');
 
         return datatables($query)
             ->addIndexColumn()
+            ->addColumn('select_all', function ($query) {
+                return '
+                    <input type="checkbox" class="matakuliah_id" name="matakuliah_id[]" id="matakuliah_id" value="' . $query->id . '">
+                ';
+            })
             ->escapeColumns([])
             ->make(true);
     }

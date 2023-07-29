@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dosen;
+use App\Models\Matakuliah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,7 +17,7 @@ class DosenController extends Controller
         return view ('admin.dosen.index');
     }
 
-    public function data (Request $request) 
+    public function data (Request $request)
     {
         $query = Dosen::orderBy('id','DESC');
 
@@ -70,7 +71,7 @@ class DosenController extends Controller
         Dosen::create($data);
 
         return response()->json(['data' => $data, 'message' => 'Data dosen berhasil disimpan']);
-        
+
     }
 
     /**
@@ -143,4 +144,42 @@ class DosenController extends Controller
 
         return view('admin.dosen.detail',compact('dosen'));
     }
+
+     /**
+     * Index detail matakuliah dosen.
+     */
+    public function dosenMatakuliahStore(Request $request)
+    {
+        $rules = [
+            'dosen_id' => 'required',
+            'matakuliah_id' => 'required'
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors(), 'message' => 'Matakuliah gagal dimasukan ke dalam kelas'], 422);
+        }
+
+        $dosen = Dosen::findOrfail($request->dosen_id);
+
+        //cek apakah dosen sudah memilih mata kuliah
+        if ($dosen->matakuliah()->where('matakuliah_id', $request->matakuliah_id)->exists()) {
+            return response()->json(['message' => 'Dosen sudah mengambil matakuliah ini'], 422);
+        }
+
+        $dosen->matakuliah()->attach($request->matakuliah_id);
+
+        return response()->json(['message' => 'Matakuliah berhasil disimpan']);
+    }
+
+    public function matakuliahDestroy($matakuliahId)
+    {
+        $matakuliah = Matakuliah::findOrfail($matakuliahId);
+
+        $matakuliah->dosen()->detach();
+
+        return response()->json(['message' => 'Matakuliah berhasil dihapus']);
+    }
+
 }

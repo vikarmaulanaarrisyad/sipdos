@@ -44,6 +44,7 @@ Route::group([
 
         Route::get('dosen/data',[DosenController::class,'data'])->name('dosen.data');
         Route::get('dosen/{id}/detail',[DosenController::class,'detail'])->name('dosen.detail');
+        Route::post('dosen/matakuliah/store', [DosenController::class, 'dosenMatakuliahStore'])->name('dosen.matakuliah.store');
         Route::resource('dosen',DosenController::class);
     });
 });

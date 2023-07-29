@@ -16,5 +16,10 @@ class Dosen extends Model
     {
         return $this->belongsToMany(Kelas::class, 'dosen_kelas')->withTimestamps();
     }
-    
+
+    public function matakuliah ()
+    {
+        return $this->belongsToMany(Matakuliah::class, 'dosen_matakuliah')->withTimestamps();
+    }
+
 }

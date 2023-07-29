@@ -27,7 +27,7 @@
     <div class="col-md-5">
         <div class="card">
             <div class="card-header">
-                <button onclick="addFormMatkul(`{{ route('dosen.store') }}`)" class="btn btn-outline-primary btn-sm"><i
+                <button id="btnTambah" onclick="addFormMatkul(`{{ route('dosen.store') }}`)" class="btn btn-outline-primary btn-sm"><i
                     class="fas fa-plus-circle"></i> Tambah Data Matkul</button>
             </div>
             <div class="card-body">
@@ -38,56 +38,28 @@
 
     </div>
 
-    <div class="col-md-4">
+    {{--  <div class="col-md-4">
         <div class="card">
             <div class="card-header">
                 <button onclick="addFormKelas(`{{ route('dosen.store') }}`)" class="btn btn-outline-primary btn-sm"><i
                     class="fas fa-plus-circle"></i> Tambah Data</button>
             </div>
             <div class="card-body">
-               
+
 
             </div>
         </div>
-    </div>
+    </div>  --}}
 </div>
 
-<x-modal data-backdrop="static" data-keyboard="false" size="modal-md" class="modal-kelas">
-    <x-slot name="title">
-        Tambah Daftar Kelas
-    </x-slot>
-
-    @method('POST')
-
-    <x-table class="matkul">
-        <x-slot name="thead">
-            <tr>
-                <th>No</th>
-                <th>Matkul</th>
-            </tr>
-        </x-slot>
-    </x-table>
-    
-
-    <x-slot name="footer">
-        <button type="button" onclick="submitForm(this.form)" class="btn btn-sm btn-outline-primary" id="submitBtn">
-            <span id="spinner-border" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            <i class="fas fa-save mr-1"></i>
-            Simpan</button>
-        <button type="button" data-dismiss="modal" class="btn btn-sm btn-outline-danger">
-            <i class="fas fa-times"></i>
-            Close
-        </button>
-    </x-slot>
-</x-modal>
-
+@include('admin.dosen.add_matakuliah')
 @endsection
 
 @include('include.datatable')
 
 @push('scripts')
     <script>
-        let modalKelas = '.modal-kelas';
+        let modal = '.modal-matakuliah';
         let button = '#submitBtn';
         let matkul;
 
@@ -102,27 +74,141 @@
             ajax: {
                 url: '{{ route('matakuliah.dosen') }}',
             },
-            columns: [{
-                    data: 'DT_RowIndex',
-                    searchable: false,
-                    sortable: false
-                },
-
-                {
-                    data: 'name'
-                },
+            columns: [
+            {
+                data: 'select_all',
+                searchable: false,
+                sortable: false
+            },
+            {
+                data: 'DT_RowIndex',
+                searchable: false,
+                sortable: false
+            },
+            {
+                data: 'name'
+            },
+            {
+                data: 'semester'
+            },
             ]
         });
 
         function addFormMatkul(url, title = "Tambah Matakuliah Ajar"){
-            $(modalKelas).modal('show');
-            $(modalKelas).modal('show');
-            $(`${modalKelas} .modal-title`).text(title);
-            $(`${modalKelas} form`).attr('action', url);
-            $(`${modalKelas} [name=_method]`).val('POST');
+            $(modal).modal('show');
+            $(modal).modal('show');
+            $(`${modal} .modal-title`).text(title);
+            $(`${modal} form`).attr('action', url);
+            $(`${modal} [name=_method]`).val('POST');
             $('#spinner-border').hide();
             $(button).prop('disabled', false);
-            resetForm(`${modalKelas} form`);
+            resetForm(`${modal} form`);
+        }
+
+        $("#select_all").on('click', function() {
+            var isChecked = $("#select_all").prop('checked');
+
+            $(".matakuliah_id").prop('checked', isChecked);
+            $("#submitBtn").prop('disabled', !isChecked);
+        });
+
+        $('#btnTambah').on('click', function() {
+            let checkbox = $('#modal-form #table tbody .matakuliah_id:checked');
+
+            if (checkbox.length > 0) {
+                $("#submitBtn").prop('disabled', false);
+            }
+            $("#submitBtn").prop('disabled', true);
+        })
+
+        $("#table tbody").on('click', '.matakuliah_id', function() {
+            if ($(this).prop('checked') != true) {
+                $("#select_all").prop('checked', false);
+            }
+
+            let semua_checkbox = $("#table tbody .matakuliah_id:checked")
+
+            let matakuliah = (semua_checkbox.length > 0)
+
+            $("#submitBtn").prop('disabled', !matakuliah)
+        })
+
+        function submitForm(url, dosenId) {
+
+            $('#spinner-border').show();
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: true,
+            })
+            swalWithBootstrapButtons.fire({
+                title: 'Apakah anda yakin?',
+                text: 'Anda akan menginputkan matakuliah terpilih.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#aaa',
+                confirmButtonText: 'Iya !',
+                cancelButtonText: 'Batalkan',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let checkbox_terpilih = $('#modal-form #table tbody .matakuliah_id:checked')
+                    let semua_id = []
+
+                    $.each(checkbox_terpilih, function(index, elm) {
+                        semua_id.push(elm.value)
+                    });
+
+                    $(button).prop('disabled', true);
+
+                    $.ajax({
+                        type: "post",
+                        url: url,
+                        data: {
+                            'matakuliah_id': semua_id,
+                            'dosen_id': dosenId
+                        },
+                        dataType: "json",
+                        success: function(response) {
+                            if (response.status = 200) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil',
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                })
+                            }
+                            $(modal).modal('hide');
+                            $(button).prop('disabled', false);
+                            $('#spinner-border').hide();
+
+                            table1.ajax.reload();
+                            table2.ajax.reload();
+                        },
+                        error: function(xhr, status, error) {
+                            // Menyembunyikan spinner loading
+                            $('#spinner-border').hide();
+
+                            // Menampilkan pesan error
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Opps! Gagal',
+                                text: xhr.responseJSON.message,
+                                showConfirmButton: true,
+                            });
+
+                            // Refresh tabel atau lakukan operasi lain yang diperlukan
+                            table1.ajax.reload();
+                            table2.ajax.reload();
+
+                        }
+                    });
+                }
+            });
         }
     </script>
 @endpush
