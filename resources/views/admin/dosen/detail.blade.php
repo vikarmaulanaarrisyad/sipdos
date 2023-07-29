@@ -24,15 +24,23 @@
         </div>
     </div>
 
-    <div class="col-md-5">
+    <div class="col-md-9">
         <div class="card">
             <div class="card-header">
                 <button id="btnTambah" onclick="addFormMatkul(`{{ route('dosen.store') }}`)" class="btn btn-outline-primary btn-sm"><i
                     class="fas fa-plus-circle"></i> Tambah Data Matkul</button>
             </div>
             <div class="card-body">
-
-
+                <x-table class="matakuliah-table">
+                    <x-slot name="thead">
+                        <tr>
+                            <th>No</th>
+                            <th>Matakuliah</th>
+                            <th>Semester</th>
+                            <th>AKsi</th>
+                        </tr>
+                    </x-slot>
+                </x-table>
             </div>
         </div>
 
@@ -61,13 +69,14 @@
     <script>
         let modal = '.modal-matakuliah';
         let button = '#submitBtn';
-        let matkul;
+        let table1, table2;
+        let matakuliah;
 
         $(function() {
             $('#spinner-border').hide();
         });
 
-        matkul = $('.matkul').DataTable({
+        table1 = $('.matkul').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
@@ -91,6 +100,33 @@
             {
                 data: 'semester'
             },
+            ]
+        });
+
+        table2 = $('.matakuliah-table').DataTable({
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ajax: {
+                url: '{{ route('dosen.matakuliah', $dosen->id) }}',
+            },
+            columns: [
+                {
+                    data: 'DT_RowIndex',
+                    searchable: false,
+                    sortable: false
+                },
+                {
+                    data: 'matakuliah'
+                },
+                {
+                    data: 'semester'
+                },
+                {
+                    data: 'aksi',
+                    searchable: false,
+                    sortable: false
+                },
             ]
         });
 
@@ -204,6 +240,62 @@
                             // Refresh tabel atau lakukan operasi lain yang diperlukan
                             table1.ajax.reload();
                             table2.ajax.reload();
+
+                        }
+                    });
+                }
+            });
+        }
+
+        function deleteMatakuliah(url) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: true,
+            })
+            swalWithBootstrapButtons.fire({
+                title: 'Apakah anda yakin?',
+                text: 'Anda akan menghapus matakuliah terpilih.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#aaa',
+                confirmButtonText: 'Iya !',
+                cancelButtonText: 'Batalkan',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "delete",
+                        url: url,
+                        dataType: "json",
+                        success: function(response) {
+                            if (response.status = 200) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil',
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                })
+                            }
+                            table2.ajax.reload();
+                            table1.ajax.reload();
+                        },
+                        error: function(xhr, status, error) {
+                            // Menampilkan pesan error
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Opps! Gagal',
+                                text: xhr.responseJSON.message,
+                                showConfirmButton: true,
+                            });
+
+                            // Refresh tabel atau lakukan operasi lain yang diperlukan
+                            table2.ajax.reload();
+                            table1.ajax.reload();
 
                         }
                     });

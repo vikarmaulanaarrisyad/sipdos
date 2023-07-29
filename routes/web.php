@@ -4,6 +4,7 @@ use App\Http\Controllers\{
     DashboardController,
     DosenController,
     KelasController,
+    KuisionerController,
     MahasiswaController,
     MatakuliahController
 };
@@ -45,7 +46,13 @@ Route::group([
         Route::get('dosen/data',[DosenController::class,'data'])->name('dosen.data');
         Route::get('dosen/{id}/detail',[DosenController::class,'detail'])->name('dosen.detail');
         Route::post('dosen/matakuliah/store', [DosenController::class, 'dosenMatakuliahStore'])->name('dosen.matakuliah.store');
+        Route::get('dosen/{dosen}/matakuliah/data', [DosenController::class, 'matakuliahData'])->name('dosen.matakuliah.data');
+        Route::get('dosen/{dosen_id}/matakuliah', [DosenController::class, 'getDosenMatakuliah'])->name('dosen.matakuliah');
+        Route::delete('dosen/matakuliah/{matakuliah_id}/destroy', [DosenController::class, 'matakuliahDestroy'])->name('dosen.matakuliah_destroy');
         Route::resource('dosen',DosenController::class);
+
+        Route::get('kuisioner/data',[KuisionerController::class,'data'])->name('kuisioner.data');
+        Route::resource('kuisioner',KuisionerController::class);
     });
 });
 

@@ -54,7 +54,7 @@
                              </p>
                          </a>
                      </li>
-                    
+
                      <li class="nav-item">
                          <a href="{{ route('matakuliah.index') }}"
                              class="nav-link {{ request()->is('matakuliah*') ? 'active' : '' }}">
@@ -82,18 +82,18 @@
                              </p>
                          </a>
                      </li>
-               
+
                      <li class="nav-header">KUISIONER</li>
                      <li class="nav-item">
-                         <a href=""
-                             class="nav-link {{ request()->is('admin/peminjaman*') ? 'active' : '' }}">
+                         <a href="{{ route('kuisioner.index') }}"
+                             class="nav-link {{ request()->is('kuisioner*') ? 'active' : '' }}">
                              <i class="nav-icon fas fa-question-circle"></i>
                              <p>
                                  Kuisioner
                              </p>
                          </a>
                      </li>
-                    
+
                      <li class="nav-header">LAPORAN</li>
                      <li class="nav-item">
                          <a href=""

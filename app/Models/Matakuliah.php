@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Matakuliah extends Model
 {
     use HasFactory;
-    
+
     protected $guarded = ['id'];
     protected $table = 'matakuliah';
 
-    public function dosen_matakuliah()
+    public function dosen()
     {
         return $this->belongsToMany(Dosen::class, 'dosen_matakuliah')->withTimestamps();
     }

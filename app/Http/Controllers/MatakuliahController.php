@@ -151,7 +151,7 @@ class MatakuliahController extends Controller
 
     public function search(Request $request)
     {
-         $query = Matakuliah::doesntHave('dosen_matakuliah');
+         $query = Matakuliah::doesntHave('dosen');
 
         return datatables($query)
             ->addIndexColumn()

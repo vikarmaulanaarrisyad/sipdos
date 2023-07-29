@@ -145,6 +145,53 @@ class DosenController extends Controller
         return view('admin.dosen.detail',compact('dosen'));
     }
 
+      /**
+     * data matakuliah dosen.
+     */
+    public function matakuliahData(Request $request)
+    {
+        $query = Matakuliah::whereDoesntHave('dosen', function ($query) use ($request) {
+            $query->where('dosen_id', $request->dosen);
+        });
+
+        return datatables($query)
+            ->addIndexColumn()
+            ->addColumn('select_all', function ($query) {
+                return '
+                    <input type="checkbox" class="matakuliah" name="matakuliah[]" id="matakuliah" value="' . $query->id . '">
+                ';
+            })
+            ->escapeColumns([])
+            ->make(true);
+    }
+
+ /**
+     * data matakuliah dosen.
+     */
+    public function getDosenMatakuliah(Request $request, $dosenId)
+    {
+        $query = Matakuliah::whereHas('dosen', function ($q) use ($dosenId) {
+            $q->where('dosen_id', $dosenId);
+        })->orderBy('id', 'ASC');
+
+        return datatables($query)
+            ->addIndexColumn()
+            ->addColumn('matakuliah', function ($query) {
+                return $query->name;
+            })
+            ->addColumn('semester', function ($query) {
+                return $query->semester;
+            })
+            ->addColumn('aksi', function ($query) {
+                return '
+                   <button onclick="deleteMatakuliah(`' . route('dosen.matakuliah_destroy', $query->id) . '`)" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Delete</button>
+                ';
+            })
+            ->escapeColumns([])
+            ->make(true);
+    }
+
+
      /**
      * Index detail matakuliah dosen.
      */
