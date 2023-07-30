@@ -10,16 +10,21 @@ class Dosen extends Model
 {
     use HasFactory;
     protected $table = 'dosen';
-    protected $fillable = ['name','jenis_kel'];
+    protected $guarded = ['id'];
 
-    public function dosen_kelas ()
+    public function dosen_kelas()
     {
         return $this->belongsToMany(Kelas::class, 'dosen_kelas')->withTimestamps();
     }
 
-    public function matakuliah ()
+    public function matakuliah()
     {
         return $this->belongsToMany(Matakuliah::class, 'dosen_matakuliah')->withTimestamps();
     }
 
+    // Model Dosen
+    public function kuisionerDetails()
+    {
+        return $this->hasMany(KuisionerDetail::class, 'dosen_id');
+    }
 }

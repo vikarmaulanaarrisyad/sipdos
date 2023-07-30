@@ -10,4 +10,19 @@ class KuisionerDetail extends Model
     use HasFactory;
     protected $table = 'kuisioner';
     protected $guarded = ['id'];
+
+    public function quis()
+    {
+        return $this->belongsTo(Kuisioner::class);
+    }
+
+    public function dosen()
+    {
+        return $this->belongsTo(Dosen::class);
+    }
+
+    public function mahasiswa()
+    {
+        return $this->belongsTo(Mahasiswa::class);
+    }
 }

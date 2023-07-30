@@ -42,13 +42,28 @@ class MahasiswaKuisioner extends Controller
                 }
             })
             ->addColumn('status', function ($query) {
-                return 'status';
-            })
-            ->addColumn('aksi', function ($query) {
-
                 foreach ($query->dosen as $dosen) {
 
                     $kuesioner = KuisionerDetail::where('dosen_id', $dosen->id)->get();
+
+                    if ($kuesioner->isEmpty()) {
+                        return '
+                            <span class="badge badge-warning">Belum mengisi</span>
+                        ';
+                    }
+
+                    return '
+                        <span class="badge badge-success">Success</span>
+                    ';
+                }
+            })
+            ->addColumn('aksi', function ($query) {
+
+                $mahasiswa = Mahasiswa::where('user_id', auth()->user()->id)->first();
+
+                foreach ($query->dosen as $dosen) {
+
+                    $kuesioner = KuisionerDetail::where('dosen_id', $dosen->id)->where('mahasiswa_id', $mahasiswa->id)->get();
 
                     if (!$kuesioner->isEmpty()) {
                         continue; // Skip this teacher and proceed to the next one
@@ -102,6 +117,26 @@ class MahasiswaKuisioner extends Controller
                 'bobot' => $value
             ]);
         }
+
+        $jumlahMengisi = KuisionerDetail::where('dosen_id', $request->dosen_id)
+            ->distinct('mahasiswa_id')->count('mahasiswa_id');
+
+        $bobot = KuisionerDetail::where('mahasiswa_id', $mahasiswa->id)
+            ->where('dosen_id', $request->dosen_id)->sum('bobot');
+
+        $pertanyaan = Kuisioner::count();
+
+        $skor = $bobot / $pertanyaan;
+
+        $nilai = $skor / $jumlahMengisi;
+
+        $dosen =  Dosen::findOrfail($request->dosen_id);
+
+        $data = [
+            'nilai' => $nilai
+        ];
+
+        $dosen->update($data);
 
         return response()->json(['message' => 'Jawaban anda berhasil disimpan']);
     }

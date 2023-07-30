@@ -96,7 +96,7 @@
 
                      <li class="nav-header">LAPORAN</li>
                      <li class="nav-item">
-                         <a href="" class="nav-link {{ request()->is('admin/report*') ? 'active' : '' }}">
+                         <a href="{{ route('report.index') }}" class="nav-link {{ request()->is('report*') ? 'active' : '' }}">
                              <i class="nav-icon fas fa-file-pdf"></i>
                              <p>
                                  Report

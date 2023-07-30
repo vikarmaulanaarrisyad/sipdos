@@ -8,6 +8,7 @@ use App\Http\Controllers\{
     MahasiswaController,
     MahasiswaKuisioner,
     MatakuliahController,
+    ReportController,
     UserProfileInformationController
 };
 use Illuminate\Support\Facades\Route;
@@ -57,6 +58,9 @@ Route::group([
 
         Route::get('kuisioner/data', [KuisionerController::class, 'data'])->name('kuisioner.data');
         Route::resource('kuisioner', KuisionerController::class);
+
+        Route::get('report/data',[ReportController::class,'data'])->name('report.data');
+        Route::get('report',[ReportController::class,'index'])->name('report.index');
     });
 
     Route::group([
