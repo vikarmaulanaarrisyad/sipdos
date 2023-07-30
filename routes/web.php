@@ -12,6 +12,7 @@ use App\Http\Controllers\{
     SettingController,
     UserProfileInformationController
 };
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,6 +28,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('auth.login');
+});
+
+Route::get('/storage-link', function () {
+    Artisan::call('storage:link');
+    return 'Storage Success';
 });
 
 Route::group([
