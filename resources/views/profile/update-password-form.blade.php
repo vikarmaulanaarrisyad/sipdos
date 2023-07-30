@@ -1,39 +1,57 @@
-<x-form-section submit="updatePassword">
-    <x-slot name="title">
-        {{ __('Update Password') }}
-    </x-slot>
+@extends('layouts.app')
 
-    <x-slot name="description">
-        {{ __('Ensure your account is using a long, random password to stay secure.') }}
-    </x-slot>
+@section('title', 'Ubah Password')
 
-    <x-slot name="form">
-        <div class="col-span-6 sm:col-span-4">
-            <x-label for="current_password" value="{{ __('Current Password') }}" />
-            <x-input id="current_password" type="password" class="mt-1 block w-full" wire:model.defer="state.current_password" autocomplete="current-password" />
-            <x-input-error for="current_password" class="mt-2" />
-        </div>
+@section('breadcrumb')
 
-        <div class="col-span-6 sm:col-span-4">
-            <x-label for="password" value="{{ __('New Password') }}" />
-            <x-input id="password" type="password" class="mt-1 block w-full" wire:model.defer="state.password" autocomplete="new-password" />
-            <x-input-error for="password" class="mt-2" />
-        </div>
+@endsection
 
-        <div class="col-span-6 sm:col-span-4">
-            <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
-            <x-input id="password_confirmation" type="password" class="mt-1 block w-full" wire:model.defer="state.password_confirmation" autocomplete="new-password" />
-            <x-input-error for="password_confirmation" class="mt-2" />
-        </div>
-    </x-slot>
+@section('content')
+    <form action="{{ route('user-password.update') }}" method="post">
+        @csrf
+        @method('put')
+        <x-card>
+            <div class="row justify-content-center">
+                <div class="col-lg-4">
+                    <div class="text-center">
+                        <img src="{{ Storage::url(auth()->user()->path_image ?? '') }}" alt=""
+                            class="img-thumbnail preview-path_image" width="200">
+                    </div>
+                </div>
+            </div>
 
-    <x-slot name="actions">
-        <x-action-message class="mr-3" on="saved">
-            {{ __('Saved.') }}
-        </x-action-message>
+            <div class="form-group">
+                <label for="current_password">Password Lama</label>
+                <input type="password" class="form-control @error('current_password') is-invalid @enderror"
+                    name="current_password" id="current_password" autocomplete="off">
+                @error('current_password')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control @error('password') is-invalid @enderror" name="password"
+                    id="password" autocomplete="off">
+                @error('password')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+            </div>
+            <div class="form-group">
+                <label for="password_confirmation">Konfirmasi Password</label>
+                <input type="password" class="form-control @error('password_confirmation') is-invalid @enderror"
+                    name="password_confirmation" id="password_confirmation" autocomplete="off">
+                @error('password_confirmation')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+            </div>
 
-        <x-button>
-            {{ __('Save') }}
-        </x-button>
-    </x-slot>
-</x-form-section>
+            <x-slot name="footer">
+                <button type="reset" class="btn btn-dark">Reset</button>
+                <button class="btn btn-primary">Simpan</button>
+            </x-slot>
+        </x-card>
+    </form>
+
+@endsection
+
+<x-notif />

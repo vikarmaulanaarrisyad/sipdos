@@ -81,7 +81,7 @@
             serverSide: true,
             autoWidth: false,
             ajax: {
-                url: '{{ route('matakuliah.dosen') }}',
+                url: '{{ route('dosen.matakuliah.data', $dosen->id) }}',
             },
             columns: [
             {

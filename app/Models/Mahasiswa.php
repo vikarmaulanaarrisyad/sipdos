@@ -10,4 +10,9 @@ class Mahasiswa extends Model
     use HasFactory;
     protected $table = 'mahasiswa';
     protected $guarded = ['id'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

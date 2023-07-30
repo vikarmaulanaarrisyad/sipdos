@@ -13,7 +13,7 @@ class MatakuliahController extends Controller
      */
     public function index()
     {
-        return view ('admin.matakuliah.index');
+        return view('admin.matakuliah.index');
     }
 
     public function data(Request $request)
@@ -26,7 +26,7 @@ class MatakuliahController extends Controller
                 return '
                     <div class="btn-group">
                         <button onclick="editForm(`' . route('matakuliah.show', $query->id) . '`)" class="btn btn-sm btn-primary"><i class="fas fa-pencil-alt"></i> Edit</button>
-                        <button onclick="deleteData(`' . route('matakuliah.destroy', $query->id) . '`, `'. $query->name .'`)" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Delete</button>
+                        <button onclick="deleteData(`' . route('matakuliah.destroy', $query->id) . '`, `' . $query->name . '`)" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Delete</button>
                     </div>
                 ';
             })
@@ -64,7 +64,7 @@ class MatakuliahController extends Controller
 
         $validator = Validator::make($request->all(), $rules, $message);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors(), 'message' => 'Silakan periksa kembali isian Anda dan coba kembali.'], 422);
         }
 
@@ -101,7 +101,7 @@ class MatakuliahController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
         $rules = [
             'kode' => 'required',
@@ -119,7 +119,7 @@ class MatakuliahController extends Controller
 
         $validator = Validator::make($request->all(), $rules, $message);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors(), 'message' => 'Silakan periksa kembali isian Anda dan coba kembali.'], 422);
         }
 
@@ -151,7 +151,9 @@ class MatakuliahController extends Controller
 
     public function search(Request $request)
     {
-         $query = Matakuliah::doesntHave('dosen');
+        $query = Matakuliah::whereDoesntHave('dosen', function ($query) use ($request) {
+            $query->where('dosen_id', $request->dosen);
+        });
 
         return datatables($query)
             ->addIndexColumn()

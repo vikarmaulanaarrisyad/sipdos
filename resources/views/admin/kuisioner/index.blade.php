@@ -14,9 +14,9 @@
                 <x-table>
                     <x-slot name="thead">
                         <tr>
-                            <th>No</th>
-                            <th>Kuis</th>
-                            <th>Aksi</th>
+                            <th style="width: 6%">No</th>
+                            <th style="10%">Aksi</th>
+                            <th style="50%">Kuis</th>
                         </tr>
                     </x-slot>
                 </x-table>
@@ -51,16 +51,16 @@
                     searchable: false,
                     sortable: false
                 },
+                 {
+                    data: 'aksi',
+                    sortable: false,
+                    searchable: false
+                },
 
                 {
                     data: 'quis'
                 },
 
-                {
-                    data: 'aksi',
-                    sortable: false,
-                    searchable: false
-                },
             ]
         });
 

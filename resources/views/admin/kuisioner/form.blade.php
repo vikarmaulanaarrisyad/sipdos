@@ -8,7 +8,7 @@
         <div class="col-md-12">
             <div class="form-group">
                 <label for="quis">Quis</label>
-                <input type="text" class="form-control" name="quis" autocomplete="off">
+                <textarea name="quis" class="form-control" id="quis" cols="30" rows="10"></textarea>
             </div>
         </div>
     </div>

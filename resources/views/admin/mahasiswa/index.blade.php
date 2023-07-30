@@ -11,20 +11,20 @@
     <div class="row">
         <div class="col-lg-12 col-md-12">
             <x-card>
-                <x-slot name="header">
+                {{--  <x-slot name="header">
                     <button onclick="addForm(`{{ route('mahasiswa.store') }}`)" class="btn btn-outline-primary btn-sm"><i
                               class="fas fa-plus-circle"></i> Tambah Data</button>
-                  </x-slot>
+                  </x-slot>  --}}
 
                   <x-table>
                     <x-slot name="thead">
                         <tr>
-                            <th>NO</th>
-                            <th>NIM MAHASISWA</th>
-                            <th>NAMA MAHASISWA</th>
-                            <th>TANGGAL LAHIR</th>
-                            <th>JENIS KELAMIN</th>
-                            <th>AKSI</th>
+                            <th style="width: 5%">NO</th>
+                            <th style="width: 10%">NIM MAHASISWA</th>
+                            <th style="width: 10%">NAMA MAHASISWA</th>
+                            <th style="width: 10%">TANGGAL LAHIR</th>
+                            <th style="width: 10%">JENIS KELAMIN</th>
+                            <th style="width: 10%">AKSI</th>
                         </tr>
                     </x-slot>
                 </x-table>
@@ -66,10 +66,10 @@
                     data: 'name'
                 },
                 {
-                    data: 'tgl'
+                    data: 'tgl_lahir'
                 },
                 {
-                    data: 'jeniskelamin'
+                    data: 'jenis_kel'
                 },
                 {
                     data: 'aksi',

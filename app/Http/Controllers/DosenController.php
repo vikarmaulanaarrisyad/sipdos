@@ -14,21 +14,21 @@ class DosenController extends Controller
      */
     public function index()
     {
-        return view ('admin.dosen.index');
+        return view('admin.dosen.index');
     }
 
-    public function data (Request $request)
+    public function data(Request $request)
     {
-        $query = Dosen::orderBy('id','DESC');
+        $query = Dosen::orderBy('id', 'DESC');
 
         return datatables($query)
             ->addIndexColumn()
             ->addColumn('aksi', function ($query) {
                 return '
                     <div class="btn-group">
-                        <a href="'. route('dosen.detail', $query->id) .'" class="btn btn-sm btn-primary"><i class="fas fa-eye"></i> Detail</a>
+                        <a href="' . route('dosen.detail', $query->id) . '" class="btn btn-sm btn-primary"><i class="fas fa-eye"></i> Detail</a>
                         <button onclick="editForm(`' . route('dosen.show', $query->id) . '`)" class="btn btn-sm btn-warning"><i class="fas fa-pencil-alt"></i> Edit</button>
-                        <button onclick="deleteData(`' . route('dosen.destroy', $query->id) . '`, `'. $query->name .'`)" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Delete</button>
+                        <button onclick="deleteData(`' . route('dosen.destroy', $query->id) . '`, `' . $query->name . '`)" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Delete</button>
                     </div>
                 ';
             })
@@ -71,7 +71,6 @@ class DosenController extends Controller
         Dosen::create($data);
 
         return response()->json(['data' => $data, 'message' => 'Data dosen berhasil disimpan']);
-
     }
 
     /**
@@ -142,10 +141,10 @@ class DosenController extends Controller
     {
         $dosen = Dosen::findOrfail($id);
 
-        return view('admin.dosen.detail',compact('dosen'));
+        return view('admin.dosen.detail', compact('dosen'));
     }
 
-      /**
+    /**
      * data matakuliah dosen.
      */
     public function matakuliahData(Request $request)
@@ -158,14 +157,14 @@ class DosenController extends Controller
             ->addIndexColumn()
             ->addColumn('select_all', function ($query) {
                 return '
-                    <input type="checkbox" class="matakuliah" name="matakuliah[]" id="matakuliah" value="' . $query->id . '">
+                    <input type="checkbox" class="matakuliah_id" name="matakuliah_id[]" id="matakuliah_id" value="' . $query->id . '">
                 ';
             })
             ->escapeColumns([])
             ->make(true);
     }
 
- /**
+    /**
      * data matakuliah dosen.
      */
     public function getDosenMatakuliah(Request $request, $dosenId)
@@ -192,7 +191,7 @@ class DosenController extends Controller
     }
 
 
-     /**
+    /**
      * Index detail matakuliah dosen.
      */
     public function dosenMatakuliahStore(Request $request)
@@ -228,5 +227,4 @@ class DosenController extends Controller
 
         return response()->json(['message' => 'Matakuliah berhasil dihapus']);
     }
-
 }

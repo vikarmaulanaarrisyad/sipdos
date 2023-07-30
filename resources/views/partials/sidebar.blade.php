@@ -2,7 +2,7 @@
      <!-- Brand Logo -->
      <a href="{{ route('dashboard') }}" class="brand-link bg-primary bg-light">
 
-         <img src="{{ Storage::url($setting->logo_aplikasi ?? config('app.name') ) }}" alt="AdminLTE Logo"
+         <img src="{{ Storage::url($setting->logo_aplikasi ?? config('app.name')) }}" alt="AdminLTE Logo"
              class="brand-image img-circle elevation-3" style="opacity: .8">
          <span class="brand-text font-weight-light">{{ $setting->nama_singkatan ?? config('app.name') }}</span>
      </a>
@@ -96,8 +96,7 @@
 
                      <li class="nav-header">LAPORAN</li>
                      <li class="nav-item">
-                         <a href=""
-                             class="nav-link {{ request()->is('admin/report*') ? 'active' : '' }}">
+                         <a href="" class="nav-link {{ request()->is('admin/report*') ? 'active' : '' }}">
                              <i class="nav-icon fas fa-file-pdf"></i>
                              <p>
                                  Report
@@ -109,8 +108,7 @@
                  @if (auth()->user()->hasRole('admin'))
                      <li class="nav-header">PENGATURAN APLIKASI</li>
                      <li class="nav-item">
-                         <a href=""
-                             class="nav-link {{ request()->is('admin/setting') ? 'active' : '' }}">
+                         <a href="" class="nav-link {{ request()->is('admin/setting') ? 'active' : '' }}">
                              <i class="nav-icon fas fa-cogs"></i>
                              <p>
                                  Setting
@@ -119,8 +117,8 @@
                      </li>
                  @else
                      <li class="nav-item">
-                         <a href=""
-                             class="nav-link {{ request()->is('mahasiswa/jadwal') ? 'active' : '' }}">
+                         <a href="{{ route('quis.index') }}"
+                             class="nav-link {{ request()->is('quis*') ? 'active' : '' }}">
                              <i class="nav-icon fas fa-calendar-alt"></i>
                              <p>
                                  Kuisioner
@@ -139,7 +137,7 @@
                      </a>
                  </li>
                  <li class="nav-item">
-                     <a href=""
+                     <a href="{{ route('profile.show.password') }}"
                          class="nav-link {{ request()->is('user/profile/password') ? 'active' : '' }}">
                          <i class="nav-icon fas fa-unlock"></i>
                          <p>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mahasiswa;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,10 +14,10 @@ class MahasiswaController extends Controller
      */
     public function index()
     {
-        return view ('admin.mahasiswa.index');
+        return view('admin.mahasiswa.index');
     }
 
-    public function data (Request $request) 
+    public function data(Request $request)
     {
         $query = Mahasiswa::all();
 
@@ -26,7 +27,7 @@ class MahasiswaController extends Controller
                 return '
                     <div class="btn-group">
                         <button onclick="editForm(`' . route('mahasiswa.show', $query->id) . '`)" class="btn btn-sm btn-primary"><i class="fas fa-pencil-alt"></i> Edit</button>
-                        <button onclick="deleteData(`' . route('mahasiswa.destroy', $query->id) . '`, `'. $query->name .'`)" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Delete</button>
+                        <button onclick="deleteData(`' . route('mahasiswa.destroy', $query->id) . '`, `' . $query->name . '`)" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Delete</button>
                     </div>
                 ';
             })
@@ -63,7 +64,7 @@ class MahasiswaController extends Controller
 
         $validator = Validator::make($request->all(), $rules, $message);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors(), 'message' => 'Silakan periksa kembali isian Anda dan coba kembali.'], 422);
         }
 
@@ -108,6 +109,10 @@ class MahasiswaController extends Controller
      */
     public function destroy(Mahasiswa $mahasiswa)
     {
-        //
+        $mahasiswa->delete();
+
+        $mahasiswa->user()->delete();
+
+        return response()->json(['message' => 'Data berhasil dihapus']);
     }
 }
