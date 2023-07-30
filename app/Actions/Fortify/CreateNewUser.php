@@ -26,6 +26,8 @@ class CreateNewUser implements CreatesNewUsers
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'jenis_kel' => ['required'],
+            'kelas_id' => ['required'],
+            'semester' => ['required'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'nim' => ['required', 'numeric', 'min:8', 'unique:mahasiswa'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
@@ -49,6 +51,8 @@ class CreateNewUser implements CreatesNewUsers
                 'user_id' => $user->id,
                 'name' => $input['name'],
                 'nim' => $input['nim'],
+                'kelas_id' => $input['kelas_id'],
+                'semester' => $input['semester'],
                 'tgl_lahir' => Date('Y-m-d'),
                 'jenis_kel' => $input['jenis_kel']
             ]);

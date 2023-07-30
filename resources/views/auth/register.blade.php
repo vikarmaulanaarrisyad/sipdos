@@ -49,13 +49,53 @@
                                     <div class="form-group mb-3">
                                         <label for="jenis_kel">Jenis Kelamin <span class="text-danger"
                                                 style="font-size: 0.84em">Mahasiswa</span></label>
-                                            <select name="jenis_kel" id="jenis_kel" class="form-control">
-                                                <option disabled selected>Pilih Jenis Kelamin</option>
-                                                <option value="Laki-laki" {{ old('Laki-laki') ? 'selected' : '' }}>Laki-laki</option>
-                                                <option value="Perempuan" {{ old('Perempuan') ? 'selected' : '' }}>Perempuan</option>
-                                            </select>
+                                        <select name="jenis_kel" id="jenis_kel" class="form-control">
+                                            <option disabled selected>Pilih Jenis Kelamin</option>
+                                            <option value="Laki-laki" {{ old('Laki-laki') ? 'selected' : '' }}>Laki-laki
+                                            </option>
+                                            <option value="Perempuan" {{ old('Perempuan') ? 'selected' : '' }}>Perempuan
+                                            </option>
+                                        </select>
 
                                         @error('jenis_kel')
+                                            <span class="invalid-feedback">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label for="kelas_id">Kelas <span class="text-danger"
+                                                style="font-size: 0.84em">Mahasiswa</span></label>
+                                        <select name="kelas_id" id="kelas_id" class="form-control">
+                                            <option disabled selected>Pilih salah satu</option>
+
+                                            @foreach ($kelas as $item)
+                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                            @endforeach
+                                        </select>
+
+                                        @error('kelas_id')
+                                            <span class="invalid-feedback">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label for="semester">Semester <span class="text-danger"
+                                                style="font-size: 0.84em">Mahasiswa</span></label>
+                                        <select name="semester" id="semester" class="form-control">
+                                            <option disabled selected>Pilih salah satu</option>
+                                            <option value="1">Semester 1</option>
+                                            <option value="2">Semester 2</option>
+                                            <option value="3">Semester 3</option>
+                                            <option value="4">Semester 4</option>
+                                            <option value="5">Semester 5</option>
+                                            <option value="6">Semester 6</option>
+                                        </select>
+
+                                        @error('semester')
                                             <span class="invalid-feedback">
                                                 {{ $message }}
                                             </span>
