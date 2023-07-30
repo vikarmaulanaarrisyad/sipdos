@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dosen;
+use App\Models\KuisionerDetail;
 use App\Models\Matakuliah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -130,6 +131,10 @@ class DosenController extends Controller
     {
         $dosen = Dosen::findOrfail($id);
         $dosen->delete();
+        $kuesioner = KuisionerDetail::where('dosen_id', $dosen->id)->get();
+        foreach ($kuesioner as $key => $item) {
+            $item->delete();
+        }
 
         return response()->json(['data' => $dosen, 'message' => 'Data dosen berhasil dihapus']);
     }
@@ -224,6 +229,7 @@ class DosenController extends Controller
         $matakuliah = Matakuliah::findOrfail($matakuliahId);
 
         $matakuliah->dosen()->detach();
+
 
         return response()->json(['message' => 'Matakuliah berhasil dihapus']);
     }

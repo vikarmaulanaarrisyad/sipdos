@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\KuisionerDetail;
 use App\Models\Mahasiswa;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -23,10 +24,16 @@ class MahasiswaController extends Controller
 
         return datatables($query)
             ->addIndexColumn()
+            ->addColumn('kelas_id', function ($query) {
+                return $query->kelas->name;
+            })
+            ->addColumn('semester', function ($query) {
+                return 'Semester '. $query->semester;
+            })
             ->addColumn('aksi', function ($query) {
+                // <button onclick="editForm(`' . route('mahasiswa.show', $query->id) . '`)" class="btn btn-sm btn-primary"><i class="fas fa-pencil-alt"></i> Edit</button>
                 return '
                     <div class="btn-group">
-                        <button onclick="editForm(`' . route('mahasiswa.show', $query->id) . '`)" class="btn btn-sm btn-primary"><i class="fas fa-pencil-alt"></i> Edit</button>
                         <button onclick="deleteData(`' . route('mahasiswa.destroy', $query->id) . '`, `' . $query->name . '`)" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Delete</button>
                     </div>
                 ';
@@ -113,6 +120,10 @@ class MahasiswaController extends Controller
 
         $mahasiswa->user()->delete();
 
+        $kuesioner = KuisionerDetail::where('mahasiswa_id', $mahasiswa->id)->get();
+        foreach ($kuesioner as $key => $item) {
+            $item->delete();
+        }
         return response()->json(['message' => 'Data berhasil dihapus']);
     }
 }

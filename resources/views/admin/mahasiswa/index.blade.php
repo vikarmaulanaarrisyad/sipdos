@@ -22,7 +22,8 @@
                             <th style="width: 5%">NO</th>
                             <th style="width: 10%">NIM MAHASISWA</th>
                             <th style="width: 10%">NAMA MAHASISWA</th>
-                            <th style="width: 10%">TANGGAL LAHIR</th>
+                            <th style="width: 10%">KELAS</th>
+                            <th style="width: 10%">SEMESTER</th>
                             <th style="width: 10%">JENIS KELAMIN</th>
                             <th style="width: 10%">AKSI</th>
                         </tr>
@@ -66,10 +67,19 @@
                     data: 'name'
                 },
                 {
-                    data: 'tgl_lahir'
+                    data: 'kelas_id',
+                    searchable: false,
+                    sortable: false
                 },
                 {
-                    data: 'jenis_kel'
+                    data: 'semester',
+                    searchable: false,
+                    sortable: false
+                },
+                {
+                    data: 'jenis_kel',
+                    searchable: false,
+                    sortable: false
                 },
                 {
                     data: 'aksi',

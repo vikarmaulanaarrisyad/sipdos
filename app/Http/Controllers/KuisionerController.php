@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kuisioner;
+use App\Models\KuisionerDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -123,6 +124,11 @@ class KuisionerController extends Controller
     public function destroy(Kuisioner $kuisioner)
     {
         $kuisioner->delete();
+
+        $kuesioners = KuisionerDetail::where('quis_id', $kuisioner->id)->get();
+        foreach ($kuesioners as $key => $item) {
+            $item->delete();
+        }
 
         return response()->json(['message' => 'Data berhasil dihapus']);
     }
