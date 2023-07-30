@@ -42,9 +42,12 @@ class MahasiswaKuisioner extends Controller
                 }
             })
             ->addColumn('status', function ($query) {
+
+                $mahasiswa = Mahasiswa::where('user_id', auth()->user()->id)->first();
+
                 foreach ($query->dosen as $dosen) {
 
-                    $kuesioner = KuisionerDetail::where('dosen_id', $dosen->id)->get();
+                    $kuesioner = KuisionerDetail::where('dosen_id', $dosen->id)->where('mahasiswa_id', $mahasiswa->id)->get();
 
                     if ($kuesioner->isEmpty()) {
                         return '
@@ -56,6 +59,20 @@ class MahasiswaKuisioner extends Controller
                         <span class="badge badge-success">Success</span>
                     ';
                 }
+                // foreach ($query->dosen as $dosen) {
+
+                //     $kuesioner = KuisionerDetail::where('dosen_id', $dosen->id)->get();
+
+                //     if ($kuesioner->isEmpty()) {
+                //         return '
+                //             <span class="badge badge-warning">Belum mengisi</span>
+                //         ';
+                //     }
+
+                //     return '
+                //         <span class="badge badge-success">Success</span>
+                //     ';
+                // }
             })
             ->addColumn('aksi', function ($query) {
 
@@ -130,10 +147,13 @@ class MahasiswaKuisioner extends Controller
 
         $nilai = $skor / $jumlahMengisi;
 
+        $keterangan = $this->keterangan($nilai);
+
         $dosen =  Dosen::findOrfail($request->dosen_id);
 
         $data = [
-            'nilai' => $nilai
+            'nilai' => $nilai,
+            'keterangan' => $keterangan,
         ];
 
         $dosen->update($data);
@@ -174,5 +194,22 @@ class MahasiswaKuisioner extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function keterangan($nilai)
+    {
+        if ($nilai >= 4.5 && $nilai <= 5) {
+            return 'Sangat Baik';
+        } elseif ($nilai >= 3.5 && $nilai < 4.5) {
+            return 'Baik';
+        } elseif ($nilai >= 2.5 && $nilai < 3.5) {
+            return 'Cukup';
+        } elseif ($nilai >= 1.5 && $nilai < 2.5) {
+            return 'Kurang';
+        } elseif ($nilai >= 0 && $nilai < 1.5) {
+            return 'Sangat Kurang';
+        } else {
+            return '-';
+        }
     }
 }

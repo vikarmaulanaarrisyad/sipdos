@@ -108,7 +108,7 @@
                  @if (auth()->user()->hasRole('admin'))
                      <li class="nav-header">PENGATURAN APLIKASI</li>
                      <li class="nav-item">
-                         <a href="" class="nav-link {{ request()->is('admin/setting') ? 'active' : '' }}">
+                         <a href="{{ route('setting.index') }}" class="nav-link {{ request()->is('setting*') ? 'active' : '' }}">
                              <i class="nav-icon fas fa-cogs"></i>
                              <p>
                                  Setting

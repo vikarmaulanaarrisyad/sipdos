@@ -12,7 +12,12 @@
         <div class="col-lg-12 col-md-12 col-12">
             <x-card>
                 <x-slot name="header">
-                    Laporan Nilai
+                    <div class="d-flex">
+                        <div class="btn-group">
+                            <a target="_blank" href="{{ route('report.export_pdf') }}" class="btn btn-sm btn-danger"><i
+                                    class="fas fa-file-pdf"></i> Export PDF</a>
+                        </div>
+                    </div>
                 </x-slot>
 
                 <x-table>
@@ -22,7 +27,7 @@
                             <th>Nama Dosen</th>
                             <th>Jml Pengisi</th>
                             <th>Jml Nilai</th>
-                            <th>Rata-rata</th>
+                            <th>Rangking</th>
                             <th>Keterangan</th>
                         </tr>
                     </x-slot>
@@ -39,7 +44,7 @@
         let table;
 
         table = $('.table').DataTable({
-             processing: true,
+            processing: true,
             serverSide: true,
             autoWidth: false,
             ajax: {
@@ -61,12 +66,13 @@
                 {
                     data: 'nilai'
                 },
-                
+
                 {
-                    data: 'nilai'
+                    data: 'rangking'
                 },
+
                 {
-                    data: 'nilai'
+                    data: 'keterangan'
                 },
             ]
         });

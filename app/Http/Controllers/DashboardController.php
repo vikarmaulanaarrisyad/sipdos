@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dosen;
+use App\Models\Kuisioner;
 use App\Models\KuisionerDetail;
+use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -13,14 +15,24 @@ class DashboardController extends Controller
         $user = auth()->user();
 
         if ($user->hasRole('admin')) {
-            return view('admin.dashboard.index');
+            $totalMahasiswa = Mahasiswa::count();
+            $totalDosen = Dosen::count();
+            $totalKuesioner = Kuisioner::count();
+            $jumlahMengisi = KuisionerDetail::distinct('mahasiswa_id')->count('mahasiswa_id');
+
+            return view('admin.dashboard.index',compact([
+                'totalMahasiswa',
+                'totalDosen',
+                'totalKuesioner',
+                'jumlahMengisi'
+            ]));
         } else {
-            $dosen = Dosen::pluck('id');
-
+            $mahasiswa = Mahasiswa::where('user_id', $user->id)->first();
             //apakah mahasiswa sudah mengisi kuisioner
-            $kuisionerDetail = KuisionerDetail::where('mahasiswa_id', $user->id)->get();
+            $kuesioner = KuisionerDetail::where('mahasiswa_id', $mahasiswa->id)->get();
 
-            return view('mahasiswa.dashboard.index', compact('user', 'kuisionerDetail'));
+
+            return view('mahasiswa.dashboard.index', compact('user', 'kuesioner'));
         }
     }
 }

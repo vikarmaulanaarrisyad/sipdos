@@ -9,6 +9,7 @@ use App\Http\Controllers\{
     MahasiswaKuisioner,
     MatakuliahController,
     ReportController,
+    SettingController,
     UserProfileInformationController
 };
 use Illuminate\Support\Facades\Route;
@@ -60,7 +61,10 @@ Route::group([
         Route::resource('kuisioner', KuisionerController::class);
 
         Route::get('report/data',[ReportController::class,'data'])->name('report.data');
+        Route::get('/report/pdf', [ReportController::class, 'exportPDF'])->name('report.export_pdf');
         Route::get('report',[ReportController::class,'index'])->name('report.index');
+
+        Route::resource('setting', SettingController::class);
     });
 
     Route::group([
