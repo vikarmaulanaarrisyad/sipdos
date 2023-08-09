@@ -83,7 +83,7 @@ class ReportController extends Controller
 
         $pdf = PDF::loadView('admin.report.pdf', compact('data'));
 
-        return $pdf->stream('Laporan-penilaian-dosen-' . date('Y-m-d-his') . '.pdf');
+        return $pdf->download('Laporan-penilaian-dosen-' . date('Y-m-d-his') . '.pdf');
     }
 
     public function jumlahPengisi($dosen)
