@@ -135,13 +135,15 @@ class MahasiswaKuisioner extends Controller
             ]);
         }
 
-        $jumlahMengisi = KuisionerDetail::where('dosen_id', $request->dosen_id)
-            ->distinct('mahasiswa_id')->count('mahasiswa_id');
+        //Menghitung jumlah mahasiswa yang sudah mengisi kuesioner
+        $jumlahMengisi = KuisionerDetail::where('dosen_id', 1)
+            ->distinct('mahasiswa_id')->count('mahasiswa_id'); // 2
 
-        $bobot = KuisionerDetail::where('mahasiswa_id', $mahasiswa->id)
-            ->where('dosen_id', $request->dosen_id)->sum('bobot');
+        //Menghitung bobot
+        $bobot = KuisionerDetail::where('dosen_id', 1)
+            ->sum('bobot'); // 126
 
-        $pertanyaan = Kuisioner::count();
+        $pertanyaan = Kuisioner::count(); // 18
 
         $skor = $bobot / $pertanyaan;
 

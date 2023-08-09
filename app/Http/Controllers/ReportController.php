@@ -66,22 +66,32 @@ class ReportController extends Controller
     public function exportPDF()
     {
         // Ambil data Dosen beserta nilai
-        $data = Dosen::all();
+        $data = Dosen::orderBy('nilai', 'Desc')->get();
 
         // Berikan peringkat berdasarkan urutan nilai
         foreach ($data as $ds) {
             $keterangan = $this->getKeterangan($ds->nilai);
             $jumlahPengisi = $this->jumlahPengisi($ds);
+
+            if ($jumlahPengisi === 0) {
+                $keterangan = 'Belum Ada Pengisi';
+            }
+
+            $ds->jumlahPengisi = $jumlahPengisi; // Simpan jumlah pengisi ke objek Dosen
+            $ds->keterangan = $keterangan; // Simpan keterangan ke objek Dosen
         }
 
-        $pdf = PDF::loadView('admin.report.pdf', compact('data', 'jumlahPengisi', 'keterangan'));
+        $pdf = PDF::loadView('admin.report.pdf', compact('data'));
 
-        return $pdf->download('Laporan-penilaian-dosen-' . date('Y-m-d-his') . '.pdf');
+        return $pdf->stream('Laporan-penilaian-dosen-' . date('Y-m-d-his') . '.pdf');
     }
 
     public function jumlahPengisi($dosen)
     {
-        return KuisionerDetail::where('dosen_id', $dosen->id)
-            ->distinct('mahasiswa_id')->count('mahasiswa_id');
+        $jmlhPengisi = KuisionerDetail::where('dosen_id', $dosen->id)
+            ->distinct('mahasiswa_id')
+            ->count('mahasiswa_id');
+
+        return $jmlhPengisi > 0 ? $jmlhPengisi : 0;
     }
 }

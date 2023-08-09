@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kuisioner;
 use App\Models\KuisionerDetail;
+use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 

@@ -14,14 +14,14 @@
 
     <h4 class="text-center">Laporan Penilaian Dosen</h4>
 
-    <table class="table table-striped table-sm" style="width: 100%">
+    <table class="table table-bordered table-sm" style="width: 100%">
         <thead>
             <tr>
-                <th>No</th>
-                <th>Nama Dosen</th>
-                <th>Jumlah Pengisi</th>
-                <th>Jumlah Nilai</th>
-                <th>Keterangan</th>
+                <th style="text-align: center;">No</th>
+                <th style="text-align: center;">Nama Dosen</th>
+                <th style="text-align: center;">Jumlah Pengisi</th>
+                <th style="text-align: center;">Jumlah Nilai</th>
+                <th style="text-align: center;">Keterangan</th>
             </tr>
         </thead>
         <tbody>
@@ -29,9 +29,9 @@
                 <tr>
                   <td>{{ $loop->iteration }}</td>
                   <td>{{ $row->name }}</td>
-                  <td style="text-align: center">{{ $jumlahPengisi }}</td>
+                  <td style="text-align: center">{{ $row->jumlahPengisi  }}</td>
                   <td style="text-align: center">{{ $row->nilai }}</td>
-                  <td style="text-align: center">{{ $keterangan }}</td>
+                  <td style="text-align: center">{{ $row->keterangan }}</td>
                 </tr>
             @endforeach
         </tbody>
