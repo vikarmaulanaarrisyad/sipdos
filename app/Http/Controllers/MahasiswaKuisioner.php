@@ -27,9 +27,6 @@ class MahasiswaKuisioner extends Controller
     {
         $mahasiswaSemester = Mahasiswa::has('user')->pluck('semester')->first();
 
-        $mahasiswa = Mahasiswa::has('user')->first();
-
-
         //mendapatkan data semester
         $query = Matakuliah::whereHas('dosen')
             ->where('semester', $mahasiswaSemester)->get();
@@ -136,7 +133,7 @@ class MahasiswaKuisioner extends Controller
         }
 
         //Menghitung jumlah mahasiswa yang sudah mengisi kuesioner
-        $jumlahMengisi = KuisionerDetail::where('dosen_id', 1)
+        $jumlahMengisi = KuisionerDetail::where('dosen_id', $request->dosen_id)
             ->distinct('mahasiswa_id')->count('mahasiswa_id'); // 2
 
         //Menghitung bobot
