@@ -21,7 +21,8 @@
                 <th style="text-align: center;">Nama Dosen</th>
                 <th style="text-align: center;">Jumlah Pengisi</th>
                 <th style="text-align: center;">Jumlah Nilai</th>
-                <th style="text-align: center;">Keterangan</th>
+                <th style="text-align: center;">Peringkat</th>
+                <th style="text-align: center;">Predikat</th>
             </tr>
         </thead>
         <tbody>
@@ -31,6 +32,7 @@
                   <td>{{ $row->name }}</td>
                   <td style="text-align: center">{{ $row->jumlahPengisi  }}</td>
                   <td style="text-align: center">{{ $row->nilai }}</td>
+                  <td style="text-align: center">{{ $row->peringkat }}</td>
                   <td style="text-align: center">{{ $row->keterangan }}</td>
                 </tr>
             @endforeach

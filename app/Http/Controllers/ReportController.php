@@ -9,6 +9,11 @@ use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class ReportController extends Controller
 {
+    public function index()
+    {
+        return view('admin.report.index');
+    }
+
     public function data(Request $request)
     {
         // Ambil data Dosen beserta nilai
@@ -41,6 +46,44 @@ class ReportController extends Controller
             ->make(true);
     }
 
+    public function exportPDF()
+    {
+        // Ambil data Dosen beserta nilai
+        $data = Dosen::orderBy('nilai', 'Desc')->get();
+
+        // Berikan peringkat berdasarkan urutan nilai
+        $peringkat = 1;
+
+        // Berikan peringkat berdasarkan urutan nilai
+        foreach ($data as $ds) {
+            $keterangan = $this->getKeterangan($ds->nilai);
+            $jumlahPengisi = $this->jumlahPengisi($ds);
+
+            if ($jumlahPengisi === 0) {
+                $keterangan = 'Belum Ada Pengisi';
+            }
+
+            $ds->peringkat = $ds->nilai === 0 ? '-' : $peringkat;
+            $peringkat++;
+
+            $ds->jumlahPengisi = $jumlahPengisi; // Simpan jumlah pengisi ke objek Dosen
+            $ds->keterangan = $keterangan; // Simpan keterangan ke objek Dosen
+        }
+
+        $pdf = PDF::loadView('admin.report.pdf', compact('data'));
+
+        return $pdf->stream('Laporan-penilaian-dosen-' . date('Y-m-d-his') . '.pdf');
+    }
+
+    public function jumlahPengisi($dosen)
+    {
+        $jmlhPengisi = KuisionerDetail::where('dosen_id', $dosen->id)
+            ->distinct('mahasiswa_id')
+            ->count('mahasiswa_id');
+
+        return $jmlhPengisi > 0 ? $jmlhPengisi : 0;
+    }
+
     public function getKeterangan($nilai)
     {
         if ($nilai >= 4.5 && $nilai <= 5) {
@@ -56,42 +99,5 @@ class ReportController extends Controller
         } else {
             return '-';
         }
-    }
-
-    public function index()
-    {
-        return view('admin.report.index');
-    }
-
-    public function exportPDF()
-    {
-        // Ambil data Dosen beserta nilai
-        $data = Dosen::orderBy('nilai', 'Desc')->get();
-
-        // Berikan peringkat berdasarkan urutan nilai
-        foreach ($data as $ds) {
-            $keterangan = $this->getKeterangan($ds->nilai);
-            $jumlahPengisi = $this->jumlahPengisi($ds);
-
-            if ($jumlahPengisi === 0) {
-                $keterangan = 'Belum Ada Pengisi';
-            }
-
-            $ds->jumlahPengisi = $jumlahPengisi; // Simpan jumlah pengisi ke objek Dosen
-            $ds->keterangan = $keterangan; // Simpan keterangan ke objek Dosen
-        }
-
-        $pdf = PDF::loadView('admin.report.pdf', compact('data'));
-
-        return $pdf->download('Laporan-penilaian-dosen-' . date('Y-m-d-his') . '.pdf');
-    }
-
-    public function jumlahPengisi($dosen)
-    {
-        $jmlhPengisi = KuisionerDetail::where('dosen_id', $dosen->id)
-            ->distinct('mahasiswa_id')
-            ->count('mahasiswa_id');
-
-        return $jmlhPengisi > 0 ? $jmlhPengisi : 0;
     }
 }
