@@ -86,16 +86,14 @@ class ReportController extends Controller
 
     public function getKeterangan($nilai)
     {
-        if ($nilai >= 4.5 && $nilai <= 5) {
+        if ($nilai >= 3.5 && $nilai <= 4) {
             return 'Sangat Baik';
-        } elseif ($nilai >= 3.5 && $nilai < 4.5) {
+        } elseif ($nilai >= 2.5 && $nilai < 3.4) {
             return 'Baik';
-        } elseif ($nilai >= 2.5 && $nilai < 3.5) {
+        } elseif ($nilai >= 1.5 && $nilai < 2.4) {
             return 'Cukup';
-        } elseif ($nilai >= 1.5 && $nilai < 2.5) {
+        } elseif ($nilai >= 0 && $nilai < 1.4) {
             return 'Kurang';
-        } elseif ($nilai >= 0 && $nilai < 1.5) {
-            return 'Sangat Kurang';
         } else {
             return '-';
         }

@@ -137,7 +137,7 @@ class MahasiswaKuisioner extends Controller
             ->distinct('mahasiswa_id')->count('mahasiswa_id'); // 2
 
         //Menghitung bobot
-        $bobot = KuisionerDetail::where('dosen_id', 1)
+        $bobot = KuisionerDetail::where('dosen_id', $request->dosen_id)
             ->sum('bobot'); // 126
 
         $pertanyaan = Kuisioner::count(); // 18
@@ -197,16 +197,14 @@ class MahasiswaKuisioner extends Controller
 
     public function keterangan($nilai)
     {
-        if ($nilai >= 4.5 && $nilai <= 5) {
+        if ($nilai >= 3.50 && $nilai <= 40) {
             return 'Sangat Baik';
-        } elseif ($nilai >= 3.5 && $nilai < 4.5) {
+        } elseif ($nilai >= 2.50 && $nilai < 3.40) {
             return 'Baik';
-        } elseif ($nilai >= 2.5 && $nilai < 3.5) {
+        } elseif ($nilai >= 1.50 && $nilai < 2.40) {
             return 'Cukup';
-        } elseif ($nilai >= 1.5 && $nilai < 2.5) {
+        } elseif ($nilai >= 0 && $nilai < 1.40) {
             return 'Kurang';
-        } elseif ($nilai >= 0 && $nilai < 1.5) {
-            return 'Sangat Kurang';
         } else {
             return '-';
         }
